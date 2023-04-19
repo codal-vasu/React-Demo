@@ -16,15 +16,13 @@ const LoginForm = () => {
   const [inputs, setInputs] = useState({});
   const navigate = useNavigate();
   const handleChange = (event) => {
-    const userEmail = event.target.name;
-    const password = event.target.name;
     const value = event.target.value;
     setInputs((values) => ({
       ...values,
-      [userEmail]: value,
-      [password]: value,
+      [event.target.name]: value,
     }));
   };
+  console.log(inputs.userEmail, inputs.password);
   const submitHandler = () => {
     console.log("name:", inputs.userEmail, "password:", inputs.password);
     navigate("/dashboard");
@@ -75,7 +73,7 @@ const LoginForm = () => {
             </Button>
           </Segment>
         </Form>
-        <Message >
+        <Message>
           New to us? <Link to="/new-account">Create New Account</Link>
         </Message>
       </Grid.Column>
