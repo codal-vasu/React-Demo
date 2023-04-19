@@ -1,8 +1,12 @@
 import React from "react";
 import { Card, Icon } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
+import { getDataFromLocalStorage } from "../../common/commonfun";
+
 const UserCard = () => {
   const navigate = useNavigate();
+  const NumberOfUser = getDataFromLocalStorage();
+
   return (
     <div
       style={{ minHeight: "100vh", margin: "30px" }}
@@ -14,7 +18,8 @@ const UserCard = () => {
         <Card.Content header="User Data" />
         <Card.Content description="List" />
         <Card.Content extra>
-          <Icon name="user" />4 Users
+          <Icon name="user" />
+          {NumberOfUser.length} Users
         </Card.Content>
       </Card>
     </div>

@@ -12,8 +12,8 @@ import {
 } from "semantic-ui-react";
 import { faker } from "@faker-js/faker";
 import { useNavigate } from "react-router-dom";
-import "./common.css";
-import { dateformate } from "./commonfunction/commonfun";
+import "../common.css";
+import { dateformate } from "../../common/commonfun";
 
 const BoolArry = [true, false];
 
@@ -55,7 +55,7 @@ const List = () => {
   const searchTerms = (key, inputstring = globalsearch) => {
     return key?.toLowerCase().startsWith(inputstring);
   };
-  console.log(sortWith);
+
   function filterdata() {
     const {
       date = "",
@@ -171,6 +171,10 @@ const List = () => {
     }
   };
 
+  const HandleActionVeiw = (id) => {
+    navigate(`/users/${id}`);
+  };
+
   return (
     <>
       <div>
@@ -179,7 +183,7 @@ const List = () => {
             <Breadcrumb.Section
               link
               onClick={() => {
-                navigate("../dashboard");
+                navigate("/dashboard");
               }}>
               Dashboard
             </Breadcrumb.Section>
@@ -198,6 +202,7 @@ const List = () => {
         <div>
           <h1>User</h1>
         </div>
+
         <div style={{ float: "right" }}>
           <Button icon onClick={addUserData}>
             <Icon name="random" />
@@ -493,22 +498,31 @@ const List = () => {
                     <Table.Cell>{item.first_name}</Table.Cell>
                     <Table.Cell>{item.last_name}</Table.Cell>
                     <Table.Cell>{item.email}</Table.Cell>
-                    <Table.Cell>{item?.date?.substring(0, 10)}</Table.Cell>
+                    <Table.Cell>{item.date}</Table.Cell>
                     <Table.Cell>{item.status}</Table.Cell>
                     <Table.Cell>
                       <div>
-                        <i
+                        <Icon
+                          link
                           aria-hidden="true"
                           className="eye bordered icon"
-                          id="icon"></i>
-                        <i
+                          id="icon"
+                          onClick={() => {
+                            HandleActionVeiw(item.id);
+                          }}
+                        />
+                        <Icon
                           aria-hidden="true"
                           className="teal edit bordered icon"
-                          id="icon"></i>
-                        <i
+                          id="icon"
+                          link
+                        />
+                        <Icon
                           aria-hidden="true"
                           className=" delete bordered icon"
-                          id="icon"></i>
+                          id="icon"
+                          link
+                        />
                       </div>
                     </Table.Cell>
                   </Table.Row>
