@@ -17,9 +17,15 @@ const Header = () => {
           justifyContent: "space-between",
         }}>
         <div style={{ display: "flex" }}>
-          <Menu.Item as="a" header>
-            <Image size="mini" src={Logo} style={{ marginRight: "1.5em" }} />
-            CRUD
+          <Menu.Item>
+            <Image
+              size="mini"
+              src={Logo}
+              style={{ marginRight: "1.5em", size: "relative " }}
+            />
+            <h2 className="ui header" style={{ color: "white", margin: "0px" }}>
+              CRUD
+            </h2>
           </Menu.Item>
           <Menu.Item
             onClick={(e) => {
