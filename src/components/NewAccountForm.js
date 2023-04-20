@@ -1,45 +1,56 @@
-import React from 'react'
-import { Button, Form, Grid, Header, Image,Message,Segment} from 'semantic-ui-react'
-import Logo from '../assets/logo.png';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import {
+  // Button,
+  // Form,
+  Grid,
+  Header,
+  Image,
+  // Message,
+  // Segment,
+} from "semantic-ui-react";
+import Logo from "../assets/logo.png";
+// import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
 const NewAccountForm = () => {
-    const [inputs, setInputs] = useState({});
-    let navigate = useNavigate();
-    const[showMessage,setShowMessage]=useState(false);
-    const handleChange = (event) => {
-      const userEmail = event.target.name;
-      const FisrtName = event.target.name;
-      const LastName = event.target.name;
-      const password = event.target.name;
-      const value = event.target.value;
-      setInputs(values => ({...values, [userEmail]: value,[password]:value,[FisrtName]:value,[LastName]:value}));
-    }
-  const submitHandler=()=>{
-    setShowMessage(true);
-    setTimeout(() => { 
-      navigate('/');    
-      }, 1500)
-    
-    
-  }
-  
-    return(
+  // const [inputs, setInputs] = useState({});
+  // let navigate = useNavigate();
+  // const [showMessage, setShowMessage] = useState(false);
+  // const handleChange = (event) => {
+  //   const userEmail = event.target.name;
+  //   const FisrtName = event.target.name;
+  //   const LastName = event.target.name;
+  //   const password = event.target.name;
+  //   const value = event.target.value;
+  //   setInputs((values) => ({
+  //     ...values,
+  //     [userEmail]: value,
+  //     [password]: value,
+  //     [FisrtName]: value,
+  //     [LastName]: value,
+  //   }));
+  // };
+  // const submitHandler = () => {
+  //   setShowMessage(true);
+  //   setTimeout(() => {
+  //     navigate("/");
+  //   }, 1500);
+  // };
+
+  return (
     <>
-        {showMessage? <Message
-            success
-            header='Your Account is Created  Successfully'
-            
-          />:null}
-    <Grid textAlign='center' style={{ height: '100vh'}} verticalAlign='middle'>
-      
-    <Grid.Column style={{ maxWidth: 450 }}>
-      <Header as='h2' color='teal' textAlign='center'>
-        <Image src={Logo} /> Create New Account 
-      </Header>
-    
-  
-      <Form onSubmit={()=>{submitHandler()}}>
+      {/* {showMessage ? (
+        <Message success header="Your Account is Created  Successfully" />
+      ) : null} */}
+      <Grid
+        textAlign="center"
+        style={{ height: "100vh" }}
+        verticalAlign="middle">
+        <Grid.Column style={{ maxWidth: 450 }}>
+          <Header as="h2" color="teal" textAlign="center">
+            <Image src={Logo} /> Create New Account
+          </Header>
+          comming soon....
+          {/* <Form onSubmit={()=>{submitHandler()}}>
       <Segment stacked>
       <Form.Input fluid icon='user' label='Enter First Name '   iconPosition='left'name="FirstName" placeholder='Fisrt Name' value={inputs.FirstName || ""} 
           onChange={(e)=>{handleChange(e)}}/>
@@ -65,11 +76,11 @@ const NewAccountForm = () => {
             Login
           </Button>
           </Segment>
-      </Form>
-     
-    </Grid.Column>
-  </Grid>
-  </>);
-}
+      </Form> */}
+        </Grid.Column>
+      </Grid>
+    </>
+  );
+};
 
-export default NewAccountForm
+export default NewAccountForm;

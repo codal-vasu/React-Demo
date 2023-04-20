@@ -1,9 +1,22 @@
-#icon{
-    background-color: white;
+#icon {
+  background-color: white;
 }
 
-#icon:hover{
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
-    background-color: rgb(39, 39, 39);
-    color: white;
+#icon:hover {
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 10px 0 rgba(0, 0, 0, 0.19);
+  background-color: rgb(39, 39, 39);
+  color: white;
+}
+
+.user-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-details {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 20px;
+  max-width: 600px;
 }
