@@ -2,11 +2,14 @@ import React from "react";
 import { Menu, Container, Image, Button } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.png";
+import { isUserAuthenticate } from "../common/commonfun";
 
 const Header = () => {
   const navigate = useNavigate();
   const clickHandler = () => {
-    navigate("/");
+    if (isUserAuthenticate()) {
+      navigate("/");
+    }
   };
 
   return (
@@ -36,7 +39,9 @@ const Header = () => {
           </Menu.Item>
           <Menu.Item
             onClick={() => {
-              navigate("/users");
+              if (isUserAuthenticate()) {
+                navigate("/users");
+              }
             }}>
             UserList
           </Menu.Item>

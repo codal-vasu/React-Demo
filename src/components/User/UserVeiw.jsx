@@ -1,13 +1,18 @@
 import React from "react";
-import { Breadcrumb } from "semantic-ui-react";
+import { Breadcrumb, Table, Icon } from "semantic-ui-react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getDataFromLocalStorage } from "../../common/commonfun";
+import {
+  getDataFromLocalStorage,
+  isUserAuthenticate,
+} from "../../common/commonfun";
 import avtar from "../../assets/avtarDp.png";
+import "../common.css";
+
 const UserVeiw = () => {
   const navigate = useNavigate();
   let { id } = useParams();
 
-  let userData = getDataFromLocalStorage();
+  let userData = getDataFromLocalStorage("Users");
   const Obj = userData.filter((item) => item.id === Number(id));
   return (
     <div>
@@ -17,7 +22,9 @@ const UserVeiw = () => {
           <Breadcrumb.Section
             link
             onClick={() => {
-              navigate("/dashboard");
+              if (isUserAuthenticate()) {
+                navigate("/dashboard");
+              }
             }}>
             Dashboard
           </Breadcrumb.Section>
@@ -25,7 +32,9 @@ const UserVeiw = () => {
           <Breadcrumb.Section
             link
             onClick={() => {
-              navigate("/users");
+              if (isUserAuthenticate()) {
+                navigate("/users");
+              }
             }}>
             Users
           </Breadcrumb.Section>
@@ -33,13 +42,48 @@ const UserVeiw = () => {
           <Breadcrumb.Section active>Users Details</Breadcrumb.Section>
         </Breadcrumb>
       </div>
-      <div>
-        <h2>Users {id}</h2>
+      <h2>User</h2>
+      <div className="user-container">
+        <div>
+          <h2 className="ui header">
+            <img src={avtar} className="ui circular image" alt="ph" />{" "}
+            {Obj[0].first_name}
+            {"  "}
+            <span style={{ color: "#467b7c" }}>{Obj[0].last_name}</span>
+          </h2>
+        </div>
 
-        <h2 className="ui header">
-          <img src={avtar} className="ui circular image" alt="ph" />
-          {Obj[0].first_name + " " + Obj[0].last_name}
-        </h2>
+        <div className="user-details">
+          <Table definition>
+            <Table.Body>
+              <Table.Row>
+                <Table.Cell>
+                  <Icon name="user"></Icon>Id{" "}
+                </Table.Cell>
+                <Table.Cell>{Obj[0].id}</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>
+                  <Icon name="mail"></Icon>Email
+                </Table.Cell>
+                <Table.Cell>{Obj[0].email}</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>
+                  {" "}
+                  <Icon name="calendar"></Icon>Joined at
+                </Table.Cell>
+                <Table.Cell>{Obj[0].date}</Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>
+                  <Icon name="bolt"></Icon>Status{" "}
+                </Table.Cell>
+                <Table.Cell>{Obj[0].status}</Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          </Table>
+        </div>
       </div>
     </div>
   );

@@ -10,8 +10,11 @@ import {
 } from "semantic-ui-react";
 import Logo from "../assets/logo.png";
 import { useState } from "react";
+import { faker } from "@faker-js/faker";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { setDataToLocalStorage, isUserAuthenticate } from "../common/commonfun";
+
 const LoginForm = () => {
   const [inputs, setInputs] = useState({});
   const navigate = useNavigate();
@@ -24,8 +27,16 @@ const LoginForm = () => {
   };
   console.log(inputs.userEmail, inputs.password);
   const submitHandler = () => {
-    console.log("name:", inputs.userEmail, "password:", inputs.password);
-    navigate("/dashboard");
+    if (
+      inputs.userEmail === "demo@codal.com" &&
+      inputs.password === "codal123"
+    ) {
+      const tocken_key = faker.datatype.uuid();
+      setDataToLocalStorage(tocken_key, "Auth_Key");
+      if (isUserAuthenticate()) {
+        navigate("/dashboard");
+      }
+    }
   };
 
   return (

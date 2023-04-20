@@ -13,7 +13,11 @@ import {
 import { faker } from "@faker-js/faker";
 import { useNavigate } from "react-router-dom";
 import "../common.css";
-import { dateformate } from "../../common/commonfun";
+import {
+  dateformate,
+  getDataFromLocalStorage,
+  setDataToLocalStorage,
+} from "../../common/commonfun";
 
 const BoolArry = [true, false];
 
@@ -39,6 +43,15 @@ const List = () => {
     date: "DESC",
     status: "DESC",
   });
+
+  // const [updatedArray, setUpdatedArray] = useState({
+  //   first_name: "DESC",
+  //   last_name: "DESC",
+  //   id: "DESC",
+  //   email: "DESC",
+  //   date: "DESC",
+  //   status: "DESC",
+  // });
 
   const totalPage = Math.ceil(userData?.length / limit);
   var startIndex = (page - 1) * limit;
@@ -135,15 +148,13 @@ const List = () => {
 
   const addUserData = () => {
     const userDataArray = createRandomUser();
-    const existing = localStorage.getItem("Users");
-    const existingArray = existing ? JSON.parse(existing) : [];
+    const existingArray = getDataFromLocalStorage("Users");
     const updated = [...existingArray, ...userDataArray];
-    localStorage.setItem("Users", JSON.stringify(updated));
+    setDataToLocalStorage(updated, "Users");
     setUserData(updated);
   };
   useEffect(() => {
-    const data = localStorage.getItem("Users");
-    const NewData = data ? JSON.parse(data) : [];
+    const NewData = getDataFromLocalStorage("Users");
     setUserData(NewData);
   }, [updateUserData]);
 
@@ -174,6 +185,17 @@ const List = () => {
   const HandleActionVeiw = (id) => {
     navigate(`/users/${id}`);
   };
+
+  // const updateArray = (index) => (e) => {
+  //   const newArray = data.map((item, i) => {
+  //     if (index === i) {
+  //       return { ...item, [e.target.name]: e.target.value };
+  //     } else {
+  //       return item;
+  //     }
+  //   });
+  //   setData(newArray);
+  // };
 
   return (
     <>
@@ -381,7 +403,7 @@ const List = () => {
               </Table.Cell>
               <Table.Cell>
                 <Input
-                  placeholder="Search id"
+                  placeholder="Search..."
                   style={{ maxWidth: "100px" }}
                   name="last_name"
                   value={columninput.last_name || ""}

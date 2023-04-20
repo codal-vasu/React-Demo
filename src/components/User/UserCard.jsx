@@ -1,11 +1,14 @@
 import React from "react";
 import { Card, Icon } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
-import { getDataFromLocalStorage } from "../../common/commonfun";
+import {
+  getDataFromLocalStorage,
+  isUserAuthenticate,
+} from "../../common/commonfun";
 
 const UserCard = () => {
   const navigate = useNavigate();
-  const NumberOfUser = getDataFromLocalStorage();
+  const NumberOfUser = getDataFromLocalStorage("Users");
 
   return (
     <div
@@ -13,7 +16,9 @@ const UserCard = () => {
       className="ui container">
       <Card
         onClick={() => {
-          navigate("/users");
+          if (isUserAuthenticate()) {
+            navigate("/users");
+          }
         }}>
         <Card.Content header="User Data" />
         <Card.Content description="List" />
