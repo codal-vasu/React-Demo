@@ -10,6 +10,8 @@ import {
   Header as Header1,
   Breadcrumb,
 } from "semantic-ui-react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { faker } from "@faker-js/faker";
 import { useNavigate } from "react-router-dom";
 import "../common.css";
@@ -31,6 +33,15 @@ const List = () => {
   const [limit, setLimit] = useState(10);
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  const [userInputFeilds, setUserInputFeilds] = useState({
+    first_name: "",
+    last_name: "",
+    id: userData.length + 1,
+    email: "",
+    date: dateformate(new Date()),
+    status: "active",
+  });
   const [updateUserData, setUpdateUserData] = useState(false);
   const [columninput, setcolumninput] = useState({ status: "All" });
   const [globalsearch, setGlobalsearch] = useState();
@@ -43,16 +54,7 @@ const List = () => {
     date: "DESC",
     status: "DESC",
   });
-
-  // const [updatedArray, setUpdatedArray] = useState({
-  //   first_name: "DESC",
-  //   last_name: "DESC",
-  //   id: "DESC",
-  //   email: "DESC",
-  //   date: "DESC",
-  //   status: "DESC",
-  // });
-
+  console.log(userInputFeilds);
   const totalPage = Math.ceil(userData?.length / limit);
   var startIndex = (page - 1) * limit;
   var endIndex = startIndex + limit;
@@ -128,6 +130,10 @@ const List = () => {
 
   const mapArray = filterdata(columninput)?.slice(startIndex, endIndex);
 
+  const UserDataHandle = (e) => {
+    setUserInputFeilds({ ...userInputFeilds, [e.target.name]: e.target.value });
+  };
+
   var createRandomUser = () => {
     let users = [];
 
@@ -152,11 +158,36 @@ const List = () => {
     const updated = [...existingArray, ...userDataArray];
     setDataToLocalStorage(updated, "Users");
     setUserData(updated);
+    setUserInputFeilds({ ...userInputFeilds, id: updated.length + 1 });
   };
   useEffect(() => {
     const NewData = getDataFromLocalStorage("Users");
     setUserData(NewData);
   }, [updateUserData]);
+
+  const AddNewUserData = () => {
+    const updatedArray = [...userData, userInputFeilds];
+    setDataToLocalStorage(updatedArray, "Users");
+    setUserData(updatedArray);
+    setOpen1(false);
+    setUserInputFeilds({ ...userInputFeilds, id: updatedArray.length + 1 });
+  };
+
+  const RemoveUser = (id) => {
+    const updatedData = userData.filter((item) => item.id !== id);
+    setUserData(updatedData);
+    setDataToLocalStorage(updatedData, "Users");
+  };
+
+  const EditUserData = () => {
+    const objIndex = userData.findIndex((obj) => obj.id === userInputFeilds.id);
+    userData[objIndex].first_name = userInputFeilds.first_name;
+    userData[objIndex].last_name = userInputFeilds.last_name;
+    userData[objIndex].email = userInputFeilds.email;
+    userData[objIndex].date = userInputFeilds.date;
+
+    setDataToLocalStorage(userData, "Users");
+  };
 
   const options = [
     { key: 1, text: "10", value: 10 },
@@ -185,17 +216,6 @@ const List = () => {
   const HandleActionVeiw = (id) => {
     navigate(`/users/${id}`);
   };
-
-  // const updateArray = (index) => (e) => {
-  //   const newArray = data.map((item, i) => {
-  //     if (index === i) {
-  //       return { ...item, [e.target.name]: e.target.value };
-  //     } else {
-  //       return item;
-  //     }
-  //   });
-  //   setData(newArray);
-  // };
 
   return (
     <>
@@ -272,9 +292,14 @@ const List = () => {
                 color="green"
                 onClick={() => {
                   setOpen(false);
+                  setUserData([]);
                   localStorage.removeItem("Users");
                   setUpdateUserData(!updateUserData);
                   setPage(1);
+                  setUserInputFeilds({
+                    ...userInputFeilds,
+                    id: 1,
+                  });
                 }}>
                 <Icon name="checkmark" /> Confirm
               </Button>
@@ -460,58 +485,167 @@ const List = () => {
                   <Header1 icon="user " content="Add User Information " />
                   <Modal.Content>
                     <form className="ui form segment">
+                      <div className="two field">
+                        <div className="field">
+                          <label>Id</label>
+                          <input
+                            type="text"
+                            name="id"
+                            placeholder={`Enter id greater then ${userData.length}`}
+                            value={userInputFeilds.id}
+                            onChange={(e) => UserDataHandle(e)}
+                          />
+                        </div>
+                      </div>
                       <div className="two fields">
                         <div className="field">
-                          <label>Name</label>
+                          <label>First Name</label>
                           <input
-                            placeholder="First Name"
-                            name="name"
+                            placeholder="Please enter first name"
+                            name="first_name"
                             type="text"
+                            onChange={(e) => UserDataHandle(e)}
+                            value={userInputFeilds.first_name}
                           />
                         </div>
                         <div className="field">
-                          <label>Gender</label>
-                          <div className="ui selection dropdown">
-                            <input name="gender" type="hidden" />
-                            <div className="default text">Gender</div>
-                            <i className="dropdown icon" />
-                            <div className="menu">
-                              <div className="item" data-value="male">
-                                Male
-                              </div>
-                              <div className="item" data-value="female">
-                                Female
-                              </div>
-                            </div>
-                          </div>
+                          <label>Last Name</label>
+                          <input
+                            placeholder="Please enter last name"
+                            name="last_name"
+                            type="text"
+                            onChange={(e) => UserDataHandle(e)}
+                            value={userInputFeilds.last_name}
+                          />
                         </div>
                       </div>
-                      <div className="field">
-                        <label>Username</label>
-                        <input
-                          placeholder="Username"
-                          name="username"
-                          type="text"
-                        />
-                      </div>
-                      <div className="field">
-                        <label>Password</label>
-                        <input name="password" type="password" />
+                      <div className="two fields">
+                        <div className="field">
+                          <label>Email Address</label>
+                          <input
+                            placeholder="Please enter email address"
+                            name="email"
+                            type="text"
+                            onChange={(e) => UserDataHandle(e)}
+                            value={userInputFeilds.email}
+                          />
+                        </div>
+                        <div className="field">
+                          <label>Date</label>
+                          <DatePicker
+                            placeholder="Please enter date"
+                            selected={new Date(userInputFeilds.date)}
+                            onChange={(date) => {
+                              setUserInputFeilds({
+                                ...userInputFeilds,
+                                date: dateformate(date),
+                              });
+                            }}
+                          />
+                        </div>
                       </div>
                       <div
                         className="ui primary submit button"
                         onClick={() => {
-                          setOpen1(false);
+                          AddNewUserData();
                         }}>
                         Submit
                       </div>
-                      <div className="ui reset button">Reset</div>
-                      <div className="ui clear button">Clear</div>
+                      <div
+                        className="ui clear button"
+                        onClick={() =>
+                          setUserInputFeilds({
+                            first_name: "",
+                            last_name: "",
+                            id: "",
+                            email: "",
+                            date: dateformate(new Date()),
+                          })
+                        }>
+                        Clear
+                      </div>
                     </form>
                   </Modal.Content>
                 </Modal>
               </Table.Cell>
             </Table.Row>
+            <Modal
+              closeIcon
+              open={open2}
+              onClose={() => setOpen2(false)}
+              onOpen={() => setOpen2(true)}>
+              <Header1 icon="user " content="Edit User Information " />
+              <Modal.Content>
+                <form className="ui form segment">
+                  <div className="two field">
+                    <div className="field">
+                      <label>Id</label>
+                      <input
+                        type="text"
+                        name="id"
+                        defaultValue={userInputFeilds.id}
+                        disabled
+                      />
+                    </div>
+                  </div>
+                  <div className="two fields">
+                    <div className="field">
+                      <label>First Name</label>
+                      <input
+                        placeholder="Please enter first name"
+                        name="first_name"
+                        type="text"
+                        onChange={(e) => UserDataHandle(e)}
+                        value={userInputFeilds.first_name}
+                      />
+                    </div>
+                    <div className="field">
+                      <label>Last Name</label>
+                      <input
+                        placeholder="Please enter last name"
+                        name="last_name"
+                        type="text"
+                        onChange={(e) => UserDataHandle(e)}
+                        value={userInputFeilds.last_name}
+                      />
+                    </div>
+                  </div>
+                  <div className="two fields">
+                    <div className="field">
+                      <label>Email Address</label>
+                      <input
+                        placeholder="Please enter email address"
+                        name="email"
+                        type="text"
+                        onChange={(e) => UserDataHandle(e)}
+                        value={userInputFeilds.email}
+                      />
+                    </div>
+                    <div className="field">
+                      <label>Date</label>
+                      <DatePicker
+                        placeholder="Please enter date"
+                        selected={new Date(userInputFeilds.date)}
+                        onChange={(date) => {
+                          setUserInputFeilds({
+                            ...userInputFeilds,
+                            date: dateformate(date),
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div
+                    className="ui primary submit button"
+                    onClick={() => {
+                      EditUserData();
+                      setOpen2(false);
+                    }}>
+                    Save
+                  </div>
+                </form>
+              </Modal.Content>
+            </Modal>
             {userData.length > 0 ? (
               <>
                 {mapArray?.map((item) => (
@@ -538,12 +672,23 @@ const List = () => {
                           className="teal edit bordered icon"
                           id="icon"
                           link
+                          onClick={() => {
+                            setOpen2(true);
+                            setUserInputFeilds({
+                              first_name: item.first_name,
+                              last_name: item.last_name,
+                              id: item.id,
+                              email: item.email,
+                              date: dateformate(item.date),
+                            });
+                          }}
                         />
                         <Icon
                           aria-hidden="true"
                           className=" delete bordered icon"
                           id="icon"
                           link
+                          onClick={() => RemoveUser(item.id)}
                         />
                       </div>
                     </Table.Cell>
